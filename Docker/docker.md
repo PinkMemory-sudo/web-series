@@ -183,13 +183,14 @@ docker rmi -f $(docker images -aq)
 | -d                        | 后台运行，不进入容器                              |
 | -p  宿主机端口:docker端口 | 端口映射                                          |
 | -P                        | 随机端口映射                                      |
+| -e                        | 设置容器env(环境变量)                             |
 | --name                    | 为容器命名                                        |
 
 
 
 **docker run -d后docker ps发现已经退出**
 
-docker容器要后台运行，就必须有一个前台进程，如果没有一直挂起的命令(top,tail)，就会自动退出。即因为docker容器中没有命令运行就退出了
+可以通过`docker logs --tail=n 容器ID`查看容器退出前的后n行日志
 
 
 
@@ -308,7 +309,7 @@ docker commit -m="描述" -a="作者" 容器ID 镜像名:tag
 
 
 
-操作  命令  进入容器  docker exec -it 容器id /bin/bash  停止容器  docker stop 容器  重启容器  docker restart 容器  复制容器文件到宿主机  docker cp 容器:文件  宿主路径  复制文件到容器  docker cp 文件 容器:路径  查看容器内部日志  docker logs -f b容器  查看容器内的进程  dicker top  查看容器配置和状态信息  docker inspect 容器  查找镜像  search 名字:版本  修改容器名  docker rename 原名  新名字
+修改容器名  docker rename 原名  新名字
 
 
 
@@ -510,19 +511,74 @@ ONBUILD
 
 
 
-## Redis集群
+## MySQL
+
+
+
+1. DockerHub上拉取镜像
+2. 运行镜像，生成容器
+
+```bash
+docker run -d --name mysql -p 8806:3306 -e MYSQL_ROOT_PASSWORD=111111 04c7801756fa
+```
+
+* 注意一定要设置密码，没有指定密码启动不起来，可以通过docker logs查看日志发现：
+
+```
+error: database is uninitialized and password option is not specified
+  You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD
+```
 
 
 
 ## ES
 
+**单机版**：
+
+```bash
+docker run -d --name es5.6.8 -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" image-id
+```
+
+
+
 
 
 ## Mongo
 
+**单机版：**
+
+```bash
+docker run -itd --name mongo -p 27017:27017 image-id
+```
 
 
-## MySQL
+
+
+
+## Redis
+
+**单机版：**
+
+```bash
+docker run -itd --name redis -p 6379:6379 image-id
+```
+
+
+
+**主从赋值模式**：
+
+
+
+**哨兵机制：**
+
+
+
+**cluster:**
+
+```
+```
+
+
 
 
 
