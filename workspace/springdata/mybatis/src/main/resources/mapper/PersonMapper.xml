@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.pk.mybatis.dao.mapper.PersonMapper">
+
+    <resultMap id="person" type="com.pk.mybatis.entity.Person">
+        <id property="id" column="id"/>
+        <collection property="phoneList" ofType="com.pk.mybatis.entity.Phone">
+            <id property="id" column="phone_id"/>
+        </collection>
+    </resultMap>
+
+    <!--    Person findById(int id);-->
+    <select id="findById" resultType="com.pk.mybatis.entity.Person">
+    select
+       *
+    from
+        person
+    WHERE
+        id=#{id}
+    limit 1;
+    </select>
+
+    <!--Person findPersonAndPhoneById(int id);-->
+    <select id="findPersonAndPhoneById" resultMap="person">
+        SELECT t1.id id,t1.name,t2.id phone_id,t2.phone_number
+        FROM person t1
+        LEFT JOIN phone t2
+        ON t1.id=t2.person_id
+        WHERE t1.id=#{id};
+    </select>
+
+</mapper>

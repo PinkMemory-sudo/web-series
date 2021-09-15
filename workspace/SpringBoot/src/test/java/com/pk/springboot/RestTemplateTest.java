@@ -1,7 +1,9 @@
 package com.pk.springboot;
 
+import com.pk.springboot.dao.CronDao;
 import com.pk.springboot.model.Area;
 import com.pk.springboot.model.UserEntity;
+import com.pk.springboot.service.CronService;
 import org.junit.jupiter.api.Test;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +109,16 @@ public class RestTemplateTest {
         strings.clear();
         System.out.println(strings1);
         System.out.println(strings);
+    }
+
+    @Autowired
+    private CronService cronService;
+
+    @Autowired
+    private CronDao cronDao;
+
+    @Test
+    public void  tst(){
+        System.out.println(cronDao.findById(1));
     }
 }
