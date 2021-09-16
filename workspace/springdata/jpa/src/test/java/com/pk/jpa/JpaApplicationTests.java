@@ -4,14 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pk.jpa.dao.VariantDao;
 import com.pk.jpa.entity.IntentionTypeEntity;
+import com.pk.jpa.entity.Parent;
 import com.pk.jpa.entity.QueryFeedbackEntity;
+import com.pk.jpa.entity.Son;
 import com.pk.jpa.entity.VariantFeedbackEntity;
 import com.pk.jpa.model.PageResultData;
+import com.pk.jpa.model.dto.ParentDto;
 import com.pk.jpa.model.param.FeedbackQueryParam;
 import com.pk.jpa.model.param.QueryFilterParam;
 import com.pk.jpa.model.param.VariantFilterParam;
 import com.pk.jpa.service.impl.VariantServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -40,9 +44,9 @@ class JpaApplicationTests {
 //        variantParam.setActionTimeStart("2020-01-01 01:00:00");
 //        variantParam.setActionTimeEnd("2021-01-01 01:00:00");
 //        variantParam.setValue(1);
-       List<Integer> reasonList = new ArrayList<>();
-       reasonList.add(2);
-       reasonList.add(3);
+        List<Integer> reasonList = new ArrayList<>();
+        reasonList.add(2);
+        reasonList.add(3);
         List<String> variantList = new ArrayList<>();
         variantList.add("yq1-2");
         variantList.add("yq1-1");
@@ -67,7 +71,7 @@ class JpaApplicationTests {
 //        param.setQueryFilterParam(queryParam);
 //        param.setIntentionList(intentionList);
         ObjectMapper mapper = new ObjectMapper();
-        PageResultData<VariantFeedbackEntity> page = variantService.findPage(param, 0, 3);
+        PageResultData<VariantFeedbackEntity> page = variantService.findPage(param, 0, 9);
         System.out.println(mapper.writeValueAsString(page));
     }
 
@@ -100,6 +104,20 @@ class JpaApplicationTests {
         typeEntity.setPosition(1);
         typeEntity.setScore(90.00);
 //        typeEntity.set
+    }
+
+    @Test
+    public void dtoTest() {
+        Son son = new Son("son");
+        List<Son> sonList = new ArrayList<>();
+        sonList.add(son);
+        Parent parent = new Parent("parent", sonList);
+        ParentDto parentDto = new ParentDto();
+        BeanUtils.copyProperties(parent, parentDto);
+        System.out.println(parent);
+        System.out.println(parentDto);
+        sonList.stream().forEach(it->{it.setName("jack");});
+        System.out.println(sonList);
     }
 
 }

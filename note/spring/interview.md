@@ -1,3 +1,7 @@
+# Spring
+
+
+
 谈谈自己对于 **Spring IoC** 和 **AOP** 的理解
 
 IoC(Inverse of Control:控制反转)是一种设计思想，就是 将原本在程序中手动创建对象的控制 权，交由**Spring**框架来管理。将对象之间的相互依赖关系交给 IoC 容器来管理，并由 IoC 容器完成对象的注入。这样可以很大 程度上简化应用的开发，把应用从复杂的依赖关系中解放出来。
@@ -33,8 +37,6 @@ Spring AOP就是基于动态代理的，如果要代理的对象，实现了某�
 
 
 **Spring 中 beanFactory 和 ApplicationContext 的联系和区别**
-
-
 
 
 
@@ -276,6 +278,13 @@ properties, yml,系统环境变量，命令行参数
 
 
 
+**后端如何解决跨域**
+
+1. CorsFilter
+2. WebMvcConfigurerAdapter
+
+
+
 **SpringBoot如何支持跨域请求**
 
 
@@ -292,13 +301,19 @@ properties, yml,系统环境变量，命令行参数
 
 **Spring Cache常用的缓存注解**
 
+@CacheAble
+
+@CachePut
+
+@CacheEvit
+
 
 
 **排除程序包**
 
 basepackage
 
-@SpringBootApplication(exclude=Xxx.class)
+@SpringBootApplication(exclude=Xxx.class)，注意是全限定类名
 
 
 
@@ -319,6 +334,8 @@ basepackage
 
 
 **如何在SpringBoot启动前运行一段指定的代码**
+
+通过ApplicationRunner或者CommandRunner接口
 
 
 

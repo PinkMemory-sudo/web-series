@@ -51,8 +51,7 @@ public class VariantServiceImpl implements VariantService {
         Page<VariantFeedbackEntity> variantPage = findVariantAll(param, pageNumber, pageSize);
         List<VariantFeedbackEntity> variantList = variantPage.getContent();
         ArrayList<VariantFeedbackDto> dtos = new ArrayList<>();
-        BeanUtils.copyProperties(variantList, dtos);
-        dtos.get(0).getIntentionList().get(0).setName("tom");
+
         // 没有query反馈的
         List<VariantFeedbackEntity> variantNoQueryList = variantList.stream()
                 .filter(it -> CollectionUtils.isEmpty(it.getQueryList())).collect(Collectors.toList());

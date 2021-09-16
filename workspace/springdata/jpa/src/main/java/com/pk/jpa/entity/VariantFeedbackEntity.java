@@ -71,7 +71,7 @@ public class VariantFeedbackEntity implements Serializable,Comparable<VariantFee
 
     // 线索有效性反馈，1代表无效，2代表有效，3代表立案,
     @Column(name = "clue_value")
-    private int clueValue;
+    private Integer clueValue;
 
     // 逗号分割的数字组合，1代表『根据内容判断无嫌疑』，2代表『三码无法落地人员身份』，3代表『常驻地不准确』，4代表『其他』,
     @Column(name = "reason")
