@@ -6,6 +6,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * 通用接口返回体
+ * 返回状态码，消息和数据
  */
 @Data
 public class RetBody<T> {

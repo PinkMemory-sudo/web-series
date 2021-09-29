@@ -17,19 +17,6 @@ public class ExcelUtil {
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
         XSSFSheet sheet = workbook.getSheetAt(0);
         XSSFRow row = sheet.getRow(6);
-//        System.out.println(row.getCell(1).getStringCellValue());
-//        System.out.println(sheet.getRow(7).getCell(1).getStringCellValue());
-        System.out.println(sheet.getRow(2).getCell(7).getStringCellValue());
 
-
-    }
-
-    public static void main(String[] args) {
-        File file = new File("/Users/chenguanlin/Downloads/20210831_variant-query.xlsx");
-        try {
-            readExcel(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
