@@ -37,12 +37,12 @@ class JpaApplicationTests {
     void contextLoads() throws JsonProcessingException {
         // 人员
         VariantFilterParam variantParam = new VariantFilterParam();
-//        variantParam.setAccountName("清公安");
+        variantParam.setAccountName("乐清公安");
 //        variantParam.setAccountId("y");
-//        variantParam.setPushDateStart("2020-01-01 01:00:00");
-//        variantParam.setPushDateStart("2020-01-01 01:00:00");
-//        variantParam.setActionTimeStart("2020-01-01 01:00:00");
-//        variantParam.setActionTimeEnd("2021-01-01 01:00:00");
+//        variantParam.setPushDateStart("2010-01-01 01:00:00");
+//        variantParam.setPushDateStart("2021-01-01 01:00:00");
+        variantParam.setActionTimeStart("2022-01-01");
+        variantParam.setActionTimeEnd("2022-01-02");
 //        variantParam.setValue(1);
         List<Integer> reasonList = new ArrayList<>();
         reasonList.add(2);
@@ -50,7 +50,7 @@ class JpaApplicationTests {
         List<String> variantList = new ArrayList<>();
         variantList.add("yq1-2");
         variantList.add("yq1-1");
-        variantParam.setVariantList(variantList);
+//        variantParam.setVariantList(variantList);
 //        variantParam.setReasonList(reasonList);
 
         // query
@@ -58,8 +58,8 @@ class JpaApplicationTests {
         List<Integer> valueList = new ArrayList<>();
 //        valueList.add(1);
         queryParam.setValueList(valueList);
-        queryParam.setActionTimeStart("2021-01-01 01:00:00");
-        queryParam.setActionTimeEnd("2022-01-01 01:00:00");
+        queryParam.setActionTimeStart("2021-01-01");
+        queryParam.setActionTimeEnd("2022-01-01");
 
         // intention
 
@@ -67,7 +67,7 @@ class JpaApplicationTests {
         intentionList.add("吸毒");
         intentionList.add("制毒");
         FeedbackQueryParam param = new FeedbackQueryParam();
-//        param.setVariantFilterParam(variantParam);
+        param.setVariantFilterParam(variantParam);
 //        param.setQueryFilterParam(queryParam);
 //        param.setIntentionList(intentionList);
         ObjectMapper mapper = new ObjectMapper();
