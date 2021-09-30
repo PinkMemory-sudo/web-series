@@ -73,18 +73,6 @@ Starting with versions 1.5.7, 1.6.11, 1.7.4, and 2.0.0, if a message body is a s
 
 
 
-**Exchange**
-
-
-
-**Queue**
-
-
-
-**Binding**
-
-
-
 **Connection Factory**
 
 三种连接工厂：
@@ -376,11 +364,291 @@ Exchange接口有5个实现类：
 
 
 
+# Basic Concept
+
+
+
+ Spring AMQP实现了 AMQP 解决方案。提供了发送和接收消息的抽象模板。目前只有一个 RabbitMQ 实现。但是，抽象已经在。
+
+* 异步处理消息的监听器
+* RabbitTemplate 来收发消息
+* RabbitAdmin 管理exchange，queue和bindings
+
+
+
+？
+
+* `@RabbitListener`指定内容类型
+
+* 消息转换器Jackson2JMessageConverter
+
+* @SpringRabbitTest
+
+* ReturnCallback->ReturnsCallback
+
+* 现在可以使用一个新的侦听器容器属性 consumeday; 在使用 RabbitMQ Sharding Plugin 时，它非常有用。
 
 
 
 
 
+
+
+
+
+
+
+
+
+路由
+
+更复杂的路由可以通过各种路由组合起来
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 使用
+
+
+
+**Quick Start**
+
+1. 添加spring-rabbit
+
+```xml
+<dependency>
+  <groupId>org.springframework.amqp</groupId>
+  <artifactId>spring-rabbit</artifactId>
+  <version>2.3.10</version>
+</dependency>
+```
+
+2. 发送接收消息
+
+```java
+ConnectionFactory connectionFactory = new CachingConnectionFactory();
+AmqpAdmin admin = new RabbitAdmin(connectionFactory);
+admin.declareQueue(new Queue("myqueue"));
+AmqpTemplate template = new RabbitTemplate(connectionFactory);
+template.convertAndSend("myqueue", "foo");
+String foo = (String) template.receiveAndConvert("myqueue");
+```
+
+// 没有指定Exchange，使用默认的Exchange和binding
+
+
+
+**JavaConfig**
+
+```java
+@Configuration
+public class RabbitConfiguration {
+
+    @Bean
+    public CachingConnectionFactory connectionFactory() {
+        return new CachingConnectionFactory("localhost");
+    }
+
+    @Bean
+    public RabbitAdmin amqpAdmin() {
+        return new RabbitAdmin(connectionFactory());
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate() {
+        return new RabbitTemplate(connectionFactory());
+    }
+
+    @Bean
+    public Queue myQueue() {
+       return new Queue("myqueue");
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+## **生产消费模型**
+
+生产消费模型实际使用默认的Exchange和binding就可以,	写下更清除。
+
+```java
+DirectExchange exchange = new DirectExchange("TestExchange");
+        Queue queue = new Queue("TestQueue");
+        Binding binding = new Binding("TestQueue", 		         		     	Binding.DestinationType.QUEUE,
+          "TestExchange", "test", null);
+        amqpAdmin.declareExchange(exchange);
+        amqpAdmin.declareQueue(queue);
+        amqpAdmin.declareBinding(binding);
+// 添加消息
+template.convertAndSend("test", "foo");
+// 获得消息
+String foo = (String) template.receiveAndConvert("TestExchange");
+```
+
+
+
+## **发布订阅模型**
+
+1. 创建Exchange，queue，binding
+
+```java
+@SpringBootTest
+public class PubSubTest {
+
+    @Autowired
+    private AmqpAdmin amqpAdmin;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Test
+    public void test() {
+        TopicExchange fodderTopic = new TopicExchange("fodderTopic");
+        Queue rabbit = new Queue("rabbit");
+        Queue hen = new Queue("hen");
+        Binding tomHenBinding = BindingBuilder.bind(hen).to(fodderTopic).with("tom.*");
+        Binding tomRabbitBinding = BindingBuilder.bind(rabbit).to(fodderTopic).with("tom.*");
+        Binding henBinding = BindingBuilder.bind(hen).to(fodderTopic).with("hen.*");
+        Binding rabbitBinding = BindingBuilder.bind(hen).to(fodderTopic).with("rabbit.*");
+        amqpAdmin.declareQueue(rabbit);
+        amqpAdmin.declareQueue(hen);
+        amqpAdmin.declareExchange(fodderTopic);
+        amqpAdmin.declareBinding(tomRabbitBinding);
+        amqpAdmin.declareBinding(tomHenBinding);
+        amqpAdmin.declareBinding(henBinding);
+        amqpAdmin.declareBinding(rabbitBinding);
+    }
+
+    @Test
+    public void sendMessage() {
+        // Message(byte[] body, MessageProperties messageProperties)
+        // 同构消息头个消息体构造Message
+        HashMap<String, String> map = new HashMap<>();
+        map.put("date", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        // 如果不需要消息头，可使用convertAndSend
+        rabbitTemplate.convertAndSend("fodderTopic", "hen.", map);
+        rabbitTemplate.convertAndSend("fodderTopic", "tom.", map);
+    }
+
+    @Test
+    public void receiveTest() {
+        log.info("rabbit:{}", rabbitTemplate.receiveAndConvert("rabbit"));
+        log.info("hen: {}", rabbitTemplate.receiveAndConvert("hen"));
+    }
+}
+```
+
+**Exchange，queue，binding之间的关系**
+
+AMQP模型的三大件
+
+queue就是存消息的，而binding用来定义哪些key可以到该queue。好像queue与binding结合，就能实现key到queue的映射，为什么还要经过Exchange？一个queue可以定义多个binding，exchange可以给这些binding分组，比如hen的queue，跟饲养相关的消息发送到一个Exchange，跟售卖相关的绑定到另一个Exchange。所以在创建Binding时，除了说明routingKey与queue的关系，还需要指定这个binding分给哪个Exchange。
+
+所以平时思考时可不考虑Exchange，只思考queue和binding的关系：queue用来存储消息，binding用来指定queue可以接收什么类型的消息，一个queue可以用过个binding，所以可以接收多种消息。
+
+
+
+一般通过@bean将Exchange，queue，binding都注入，发消息时直接使用。
+
+
+
+## 异步处理
+
+比如你发工资了，然后卖了白酒的基金，有卖了医药的基金。这种操作实际可以异步的并行处理：将你发工资的好消息发送到医药和白酒的消息队列，白酒和医疗就分别购入。
+
+这次用监听器来写
+
+```java
+@Slf4j
+@Configuration
+public class SyncTestConfig {
+
+    // 白酒的消息队列
+    @Bean
+    public Queue whiteWine() {
+        return new Queue("whiteWine");
+    }
+
+    // 医药的消息队列
+    @Bean
+    public Queue medicine() {
+        return new Queue("medicine");
+    }
+
+    // Exchange
+    @Bean
+    public TopicExchange funtExchange() {
+        return new TopicExchange("fund");
+    }
+
+    // 白酒bind工资信息
+    @Bean
+    public Binding wwBind() {
+        return BindingBuilder.bind(whiteWine()).to(funtExchange()).with("salary");
+    }
+
+    // 医药bind工资消息
+    @Bean
+    public Binding mdBind() {
+        return BindingBuilder.bind(medicine()).to(funtExchange()).with("salary");
+    }
+
+    // 告诉券商们，我发工资了
+    @Bean
+    public ApplicationRunner runner(AmqpTemplate template) {
+        return args -> template.convertAndSend("fund","salary", "998");
+    }
+
+    // 监听队列
+    @RabbitListener(queues = "whiteWine")
+    public void wlisten(String in) {
+        log.info("ALLIN: {}",in);
+    }
+
+    // 监听队列
+    @RabbitListener(queues = "medicine")
+    public void mlisten(String in) {
+        log.info("ALLIN: {}",in);
+    }
+
+}
+```
+
+
+
+## 流量削峰
+
+
+
+
+
+## 解耦
+
+A服务需要向B,C服务发送消息，现在D也需要怎么办？MQ
+
+
+
+
+
+**发布是异步的，怎么检测是否成功？**
+
+不能路由的消息由 RabbitMQ 删除
 
 
 

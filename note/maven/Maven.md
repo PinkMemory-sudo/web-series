@@ -34,11 +34,11 @@ maven的生命周期通过各个插件来完成。执行命令需要用到某些
 
 ***测试***  ：自动测试，保证本次修改不影响上次
 
-***打包***
+***打包 ***： 
 
-***安装*** ： 将打包好的文件复制到仓库中指定的位置
+***安装*** ： 安装打包的项目到本地仓库，以供其他项目使用
 
-***部署*** ： 将打好的包赋值到容器目录下
+***部署*** ： 拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程
 
 
 
@@ -48,6 +48,23 @@ maven的生命周期通过各个插件来完成。执行命令需要用到某些
 
 1. 打开maven的conf/settings.xml 
 2. 修改localRepository标签
+
+
+
+**修改下载源**
+
+```xml
+<mirrors>
+    <mirror>
+      <id>alimaven</id>
+      <name>aliyun maven</name>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <mirrorOf>central</mirrorOf>        
+    </mirror>
+</mirrors>
+```
+
+
 
 
 
