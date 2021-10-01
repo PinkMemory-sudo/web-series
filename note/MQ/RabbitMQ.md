@@ -163,7 +163,7 @@ ActiveMQ
 
 
 
-![image-20210302214341805](/Users/chenguanlin/Documents/note/0img/image-20210302214341805.png)
+![image-20210302214341805](../img/image-20210302214341805.png)
 
 即：
 
