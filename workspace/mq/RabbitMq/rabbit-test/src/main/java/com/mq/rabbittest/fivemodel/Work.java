@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-
 /**
  * simple工作模式
  * 使用默认的Exchange和bind
@@ -26,8 +24,6 @@ public class Work {
     // 创建队列
     @Bean
     public Queue workQueue() {
-        LocalDate date1 = LocalDate.now();
-        LocalDate date2 = LocalDate.now();
         return new Queue("work_queue");
     }
 
