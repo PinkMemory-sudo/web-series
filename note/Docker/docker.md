@@ -7,6 +7,7 @@
 * 创建镜像
 * 更新镜像
 * 使用镜像
+*  数据卷挂载 
 
 
 
@@ -576,6 +577,7 @@ docker run -itd --name redis -p 6379:6379 image-id
 **cluster:**
 
 ```
+
 ```
 
 
