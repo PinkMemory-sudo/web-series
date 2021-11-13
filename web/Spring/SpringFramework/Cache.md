@@ -1,0 +1,13 @@
+CacheManager接口来统一不同的缓存技术
+
+Cache接口下Spring提供了各种xxxCache的实现；如RedisCache，EhCacheCache ,ConcurrentMapCache等
+
+Cache接口为缓存的组件规范定义，包含缓存的各种操作集合；
+
+每次调用需要缓存功能的方法时，会先检查有没有调用过，能够根据方法的请求参数对其进行缓存
+
+使用Spring缓存抽象时我们需要关注以下两点；
+
+1、确定方法需要被缓存以及他们的缓存策略
+
+2、从缓存中读取之前缓存存储的数据
