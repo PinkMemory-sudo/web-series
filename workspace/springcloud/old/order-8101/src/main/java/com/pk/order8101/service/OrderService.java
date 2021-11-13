@@ -5,6 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @FeignClient("goods")
 public interface OrderService {
-    @GetMapping("/hello") //请求结果作为接口的返回值
+    @GetMapping("/goods/list") //请求结果作为接口的返回值
     String getOrderGoods(String orderId);
 }

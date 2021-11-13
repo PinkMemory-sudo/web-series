@@ -44,6 +44,10 @@ CS架构，所以可以类比MySQL，服务需要在配置文件中配置连接
 
 ## Eureka的自我保护机制
 
+高可用的设计理念
+
+
+
 现象：页面出现红色的字(短时间多个微服务挂了)
 
 Eureka Server将会尝试保护服务注册表信息，不移除服务。术语CPA里面的AP。
@@ -143,7 +147,7 @@ eureka.client.service-url.defaultZone=http://localhost:8001/eureka/
 
 
 
-**将自己注册到另一个注册中心**
+**将自己注册到另外几个注册中心**
 
 ```properties
 server.port=8001
@@ -173,13 +177,17 @@ eureka.client.service-url.defaultZone=http://localhost:8001/eureka/,http://local
 
 
 
-## Eureka client集群
+**Eureka client**
 
-一个服务，部署到了不同的服务器，都注册到注册中心，保持application-name不变
+只需要在url.defaultZone中指定所有注册中心
 
 
 
-其他配置
+## *Eureka client集群*
+
+把某个服务启动多个，都注册到注册中心，保持application-name不变
+
+
 
 ```properties
 # 是否允许开启自我保护模式，缺省：true
@@ -224,7 +232,7 @@ eureka.instance.health-check-url-path = /health
 
 
 
-# Discover服务发现
+# DiscoveryClient
 
 对于注册到Eureka里的微服务，通过服务发现来获得该服务的信息。
 
@@ -247,14 +255,14 @@ discoveryClient.getInstancesById()
 
 # Ribbon
 
-* 客户端负载均衡工具，Eureka-Client已经集成了Ribbon，现在已经换成LoadBalence了
+* 服务调用者负载均衡工具，Eureka-Client已经集成了Ribbon，现在已经换成LoadBalence了
 * 不再更新，已经进入维护状态
 * 替换方案：Spring的LoadBalance
 * 默认是轮询的负载均衡算法
 
 
 
-## 与Nginx的区别
+**与Nginx的区别**
 
 * 一个是进程内(本地客户端)的LB，一个是进程外(服务端)的LB
 * 所有请求交给nginx，由nginx转发
@@ -262,7 +270,7 @@ discoveryClient.getInstancesById()
 
 
 
-## 替换Ribbon的载均衡算法
+**替换Ribbon的载均衡算法**
 
 就是自己注入一个IRule
 
