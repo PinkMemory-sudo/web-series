@@ -2,6 +2,179 @@
 
 
 
+**什么是Spring**
+
+
+
+**DispatcherServlet的工作原理**
+
+
+
+**Spring中的bean是线程安全的吗**
+
+
+
+
+
+
+
+## AOP
+
+
+
+**什么是AOP**
+
+面向切面编程，通过预编译和运行时动态代理来实现在不修改源码的情况下，给程序统一添加功能的技术。可以将非业务代码统一提取出来处理。
+
+
+
+**代理模式**
+
+
+
+
+
+**AOP的名词**
+
+
+
+**AOP都有哪些实现**
+
+Spring AOP就是基于动态代理的，如果要代理的对象，实现了某个接口，那么Spring AOP会使 用JDK Proxy，去创建代理对象，而对于没有实现接口的对象，就无法使用 JDK Proxy 去进行代 理了，这时候Spring AOP会使用Cglib。
+
+
+
+**SpringAOP和AspectJAOP的区别**
+
+SpringAOP是运行时增强，AspectJ是编译时增强。 
+
+Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作(Bytecode Manipulation)。
+
+Spring AOP 已经集成了 AspectJ，AspectJ 相比于 Spring AOP 功能更加强大，但是 Spring AOP 相对来说更简单。但是，当切面太多的话，最好选择 AspectJ ，它比Spring AOP 快很多。
+
+
+
+
+
+## IOC
+
+
+
+**什么是控制反转**
+
+就是将对象的创建和管理交给Spring去做，怎么创建对象提前定义好，需要时直接使用。
+
+
+
+**什么是Spring容器**
+
+
+
+**Spring中有多少Ioc容器**
+
+
+
+WebApplicationContext，BeanFactory
+
+
+
+**IOC实现原理**
+
+
+
+**什么是依赖注入**
+
+
+
+**依赖注入有几种方法**
+
+
+
+
+
+**bean的作用域**
+
+
+
+| 作用域         | 描述 |
+| -------------- | ---- |
+| singleton      |      |
+| prototype      |      |
+| request        |      |
+| session        |      |
+| global-session |      |
+
+
+
+**Spring中的bean声明周期**
+
+
+
+
+
+**容器的声明周期**
+
+
+
+**SpringBean是线程安全的吗**
+
+
+
+**@Component 和 @Bean 的区别是什么**
+
+* @Component 注解作用于类，而 @Bean 注解作用于方法。
+* @Component通过@ComponentScan扫描自动装配，@Bean方法返回一个bean，与@Configuration一起使用
+
+
+
+## 配置文件
+
+
+
+## MVC
+
+
+
+**用到了哪些设计模式**
+
+
+
+
+
+## 注解
+
+
+
+**@Required有什么用**
+
+
+
+**@Qualifier**
+
+
+
+**@Lazy(true)**
+
+延迟初始化
+
+
+
+**@PostConstruct**
+
+
+
+**@PreDestory**
+
+
+
+**@Primary**
+
+
+
+**优先级**
+
+
+
 谈谈自己对于 **Spring IoC** 和 **AOP** 的理解
 
 IoC(Inverse of Control:控制反转)是一种设计思想，就是 将原本在程序中手动创建对象的控制 权，交由**Spring**框架来管理。将对象之间的相互依赖关系交给 IoC 容器来管理，并由 IoC 容器完成对象的注入。这样可以很大 程度上简化应用的开发，把应用从复杂的依赖关系中解放出来。
@@ -108,6 +281,60 @@ Spring AOP就是基于动态代理的，如果要代理的对象，实现了某�
 
 
 
+**过滤程序包**
+
+
+
+排除不需要的自动配置
+
+
+
+**启动SpringBoot时运行一些代码**
+
+
+
+**日志框架**
+
+
+
+**定时任务**
+
+
+
+**spring-boot-starter-parent**
+
+
+
+
+
+**多数据源配置**
+
+
+
+**多数据源的事务**
+
+
+
+
+
+**什么是SpringBoot**
+
+
+
+**自动配置原理**
+
+
+
+## 事务
+
+
+
+## Cache
+
+
+
+
+
 **什么是SpringBoot**
 
 Springboot是一个微服务框架，简化创建Spring的配置，springboot提供了许多自动配置
@@ -210,6 +437,10 @@ properties, yml,系统环境变量，命令行参数
 
 
 
+actuator
+
+
+
 **SpringBoot监听器流程**
 
 
@@ -219,10 +450,6 @@ properties, yml,系统环境变量，命令行参数
 
 
 **SpringBoot指定运行环境/配置文件**
-
-
-
-**SpringBoot内置容器**
 
 
 
@@ -259,6 +486,10 @@ properties, yml,系统环境变量，命令行参数
 使用snyk检查依赖关系
 
 启用CSRF
+
+
+
+
 
 
 

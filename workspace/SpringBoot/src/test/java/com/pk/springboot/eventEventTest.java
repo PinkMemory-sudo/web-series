@@ -2,8 +2,6 @@ package com.pk.springboot;
 
 import com.pk.springboot.event.MyEvent;
 import com.pk.springboot.model.ApiStatModel;
-import com.pk.springboot.service.ApiStatAspect;
-import org.apache.catalina.core.StandardContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.test.context.SpringBootTest;
